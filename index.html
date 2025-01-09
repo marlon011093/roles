@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Galería de Fotos</title>
+    <style>
+      /* Estilo del cuerpo principal */
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+      }
+
+      .galeria {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 100px 1fr 1fr; /* Espaciador entre la columna 3 y 4 */
+    grid-template-rows: auto auto; /* Dos filas con altura automática */
+    row-gap: 100px; /* Espacio de 100px entre las filas */
+    column-gap: 0; /* No hay espacio adicional entre otras columnas */
+    width: 100%; /* Ajustar al contenedor */
+    max-width: 1200px; /* Limitar el ancho máximo */
+    margin: 0 auto; /* Centrar la cuadrícula */
+        }
+
+      /*
+      .galeria {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(200px, 1fr));
+        row-gap: 100px;
+        grid-template-columns: 0fr 0fr 0fr 50px 0fr 0fr;
+        width: 90%;
+        max-width: 800px;
+      }
+
+      */
+      .foto-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+      .foto-item img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }
+      .foto-item h3 {
+        font-size: 1em;
+        text-align: center;
+        margin: 10px 0 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="galeria" id="galeria"></div>
+    
+    <script>
+      // Función para cargar y mostrar las fotos
+      function cargarFotos() {
+        google.script.run.withSuccessHandler(mostrarFotos).obtenerDatosFotos();
+      }
+
+      // Función para mostrar las fotos y títulos obtenidos
+      function mostrarFotos(fotos) {
+        const galeria = document.getElementById("galeria");
+        galeria.innerHTML = ""; // Limpiar la galería antes de agregar nuevos elementos
+
+        fotos.forEach(foto => {
+          const fotoItem = document.createElement("div");
+          fotoItem.classList.add("foto-item");
+
+          const img = document.createElement("img");
+          img.src = foto.url;
+          img.alt = foto.titulo;
+
+          const titulo = document.createElement("h3");
+          titulo.textContent = foto.titulo;
+
+          fotoItem.appendChild(img);
+          fotoItem.appendChild(titulo);
+          galeria.appendChild(fotoItem);
+        });
+      }
+
+      // Cargar las fotos al inicio
+      cargarFotos();
+
+      // Configurar el refresco automático cada 60 segundos (60000 milisegundos)
+      setInterval(cargarFotos, 60000);
+    </script>
+  </body>
+</html>
+
